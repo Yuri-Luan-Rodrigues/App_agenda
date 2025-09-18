@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../models/contato_entity.dart';
 import '../screens/novo_cadastro_screen.dart';
+import '../screens/bloqueados_screen.dart';
 import '../widgets/contato_tile.dart';
+import '../controllers/theme_controller.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -38,6 +41,12 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
+  void _alternarBloqueio(int index) {
+    setState(() {
+      contatos[index].bloqueado = !contatos[index].bloqueado;
+    });
+  }
+
   void _ordenarContatos() {
     contatos.sort((a, b) => a.nome.toLowerCase().compareTo(b.nome.toLowerCase()));
   }
@@ -48,6 +57,22 @@ class _HomeScreenState extends State<HomeScreen> {
       appBar: AppBar(
         title: const Text('Agenda de Contatos'),
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+        actions: [
+          Consumer<ThemeController>(
+            builder: (context, themeController, _) {
+              final isDarkMode = themeController.themeMode == ThemeMode.dark;
+              return IconButton(
+                icon: Icon(
+                  isDarkMode ? Icons.wb_sunny : Icons.nightlight_round,
+                ),
+                tooltip: 'Alternar tema',
+                onPressed: () {
+                  themeController.toggleTheme();
+                },
+              );
+            },
+          ),
+        ],
       ),
       drawer: Drawer(
         child: ListView(
@@ -61,7 +86,7 @@ class _HomeScreenState extends State<HomeScreen> {
               leading: const Icon(Icons.home),
               title: const Text('Início'),
               onTap: () {
-                Navigator.pop(context); // Fecha o Drawer
+                Navigator.pop(context);
               },
             ),
             ListTile(
@@ -76,7 +101,13 @@ class _HomeScreenState extends State<HomeScreen> {
               title: const Text('Bloqueados'),
               onTap: () {
                 Navigator.pop(context);
-                Navigator.pushNamed(context, '/bloqueados');
+                final bloqueados = contatos.where((c) => c.bloqueado).toList();
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => BloqueadosScreen(contatos: bloqueados),
+                  ),
+                );
               },
             ),
             const Divider(),
@@ -85,7 +116,7 @@ class _HomeScreenState extends State<HomeScreen> {
               title: const Text('Configurações'),
               onTap: () {
                 Navigator.pop(context);
-                // Navigator.pushNamed(context, '/configuracoes'); // futura rota
+                // Futuro: Navigator.pushNamed(context, '/configuracoes');
               },
             ),
           ],
@@ -104,6 +135,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   onEdit: (contatoEditado, i) {
                     _novoContato(contatoExistente: contatoEditado, index: i);
                   },
+                  onToggleBloqueado: _alternarBloqueio,
                 );
               },
             ),
