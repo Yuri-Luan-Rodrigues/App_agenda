@@ -39,9 +39,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void _ordenarContatos() {
-    contatos.sort(
-      (a, b) => a.nome.toLowerCase().compareTo(b.nome.toLowerCase()),
-    );
+    contatos.sort((a, b) => a.nome.toLowerCase().compareTo(b.nome.toLowerCase()));
   }
 
   @override
@@ -53,20 +51,43 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       drawer: Drawer(
         child: ListView(
-          children: const [
-            UserAccountsDrawerHeader(
+          children: [
+            const UserAccountsDrawerHeader(
               currentAccountPicture: Icon(Icons.account_circle_sharp, size: 70),
               accountName: Text('Yuri Luan'),
               accountEmail: Text('Yuri.rodrigues@detran.go.gov.br'),
             ),
-            ListTile(leading: Icon(Icons.home), title: Text('Início')),
             ListTile(
-              leading: Icon(Icons.account_circle),
-              title: Text('Contatos'),
+              leading: const Icon(Icons.home),
+              title: const Text('Início'),
+              onTap: () {
+                Navigator.pop(context); // Fecha o Drawer
+              },
             ),
-            ListTile(leading: Icon(Icons.add), title: Text('Marcadores')),
-            Divider(),
-            ListTile(leading: Icon(Icons.block), title: Text('Bloqueados')),
+            ListTile(
+              leading: const Icon(Icons.account_circle),
+              title: const Text('Contatos'),
+              onTap: () {
+                Navigator.pop(context);
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.block),
+              title: const Text('Bloqueados'),
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.pushNamed(context, '/bloqueados');
+              },
+            ),
+            const Divider(),
+            ListTile(
+              leading: const Icon(Icons.settings),
+              title: const Text('Configurações'),
+              onTap: () {
+                Navigator.pop(context);
+                // Navigator.pushNamed(context, '/configuracoes'); // futura rota
+              },
+            ),
           ],
         ),
       ),
@@ -80,8 +101,8 @@ class _HomeScreenState extends State<HomeScreen> {
                   contato: contato,
                   index: index,
                   onDelete: _excluirContato,
-                  onEdit: (contato, index) {
-                    _novoContato(contatoExistente: contato, index: index);
+                  onEdit: (contatoEditado, i) {
+                    _novoContato(contatoExistente: contatoEditado, index: i);
                   },
                 );
               },
