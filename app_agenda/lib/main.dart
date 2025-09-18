@@ -1,3 +1,4 @@
+import 'package:app_agenda/ContatoEntity.dart';
 import 'package:app_agenda/NovoCadastroScreen.dart';
 import 'package:flutter/material.dart';
 
@@ -31,12 +32,15 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
+  List<ContatoEntity> contatos = <ContatoEntity>[];
 
-  void _novoContato() async{
-    Navigator.of(context).push(
-      MaterialPageRoute<void>(builder: (context) => const NovoCadastroScrenn()),
-    );
+  void _novoContato() async {
+    ContatoEntity? contatoEntity = await Navigator.of(
+      context,
+    ).push(MaterialPageRoute(builder: (context) => const NovoCadastroScreen()));
+    if (contatoEntity != null) {
+      contatos.add(contatoEntity);
+    }
   }
 
   @override
@@ -44,7 +48,6 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-
         title: Text(widget.title),
       ),
       drawer: Drawer(
@@ -82,15 +85,10 @@ class _MyHomePageState extends State<MyHomePage> {
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text('You have pushed the button this many times:'),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium,
-            ),
-          ],
+          children: <Widget>[],
         ),
       ),
+
       floatingActionButton: FloatingActionButton(
         onPressed: _novoContato,
         tooltip: 'Increment',

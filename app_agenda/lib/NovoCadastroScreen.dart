@@ -1,16 +1,16 @@
 import 'package:app_agenda/ContatoEntity.dart';
 import 'package:flutter/material.dart';
 
-class NovoCadastroScrenn extends StatefulWidget {
-  const NovoCadastroScrenn({super.key});
+class NovoCadastroScreen extends StatefulWidget {
+  const NovoCadastroScreen({super.key});
 
   @override
-  State<NovoCadastroScrenn> createState() => _NovoCadastroScrennState();
+  State<NovoCadastroScreen> createState() => _NovoCadastroScrennState();
 }
 
-class _NovoCadastroScrennState extends State<NovoCadastroScrenn> {
+class _NovoCadastroScrennState extends State<NovoCadastroScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  Contatoentity contatoEntity = Contatoentity();
+  ContatoEntity contatoEntity = ContatoEntity();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -21,7 +21,7 @@ class _NovoCadastroScrennState extends State<NovoCadastroScrenn> {
       body: Form(
         key: _formKey,
         child: Padding(
-          padding: const EdgeInsets.all(23.0),
+          padding: const EdgeInsets.all(25.0),
           child: Column(
             children: [
               TextFormField(
@@ -59,7 +59,7 @@ class _NovoCadastroScrennState extends State<NovoCadastroScrenn> {
                 child: ElevatedButton(
                   onPressed: () {
                     if(_formKey.currentState!.validate()){
-                      Navigator.pop(context);
+                      Navigator.pop(context, contatoEntity);
 
                     }
                     
