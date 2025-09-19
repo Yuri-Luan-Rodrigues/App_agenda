@@ -1,13 +1,13 @@
 class ContatoEntity {
   String nome;
-  String email;
   String telefone;
+  String email;
   bool bloqueado;
 
   ContatoEntity({
-    this.nome = '',
-    this.email = '',
-    this.telefone = '',
+    required this.nome,
+    required this.telefone,
+    required this.email,
     this.bloqueado = false,
   });
 }

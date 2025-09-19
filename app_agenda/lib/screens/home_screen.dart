@@ -56,14 +56,13 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Agenda de Contatos'),
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         actions: [
           Consumer<ThemeController>(
             builder: (context, themeController, _) {
-              final isDarkMode = themeController.themeMode == ThemeMode.dark;
+              final isDark = themeController.themeMode == ThemeMode.dark;
               return IconButton(
                 icon: Icon(
-                  isDarkMode ? Icons.wb_sunny : Icons.nightlight_round,
+                  isDark ? Icons.wb_sunny : Icons.nightlight_round,
                 ),
                 tooltip: 'Alternar tema',
                 onPressed: () {
@@ -78,6 +77,9 @@ class _HomeScreenState extends State<HomeScreen> {
         child: ListView(
           children: [
             const UserAccountsDrawerHeader(
+              decoration: BoxDecoration(
+                color: Colors.deepPurple,
+              ),
               currentAccountPicture: Icon(Icons.account_circle_sharp, size: 70),
               accountName: Text('Yuri Luan'),
               accountEmail: Text('Yuri.rodrigues@detran.go.gov.br'),

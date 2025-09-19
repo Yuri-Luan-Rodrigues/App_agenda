@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import '../models/contato_entity.dart';
+import '../screens/detalhes_contato_screen.dart';
 
 class ContatoTile extends StatelessWidget {
   final ContatoEntity contato;
   final int index;
-  final Function(int) onDelete;
-  final Function(ContatoEntity, int) onEdit;
-  final Function(int) onToggleBloqueado;
+  final void Function(int) onDelete;
+  final void Function(ContatoEntity, int) onEdit;
+  final void Function(int) onToggleBloqueado;
 
   const ContatoTile({
     super.key,
@@ -19,32 +20,55 @@ class ContatoTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListTile(
-      leading: Icon(
-        contato.bloqueado ? Icons.block : Icons.person,
-        color: contato.bloqueado ? Colors.red : null,
-      ),
-      title: Text(contato.nome),
-      subtitle: Text('${contato.email}\n${contato.telefone}'),
-      isThreeLine: true,
-      onTap: () => onEdit(contato, index),
-      trailing: Wrap(
-        spacing: 8,
-        children: [
-          IconButton(
-            icon: Icon(
-              contato.bloqueado ? Icons.lock_open : Icons.lock,
-              color: contato.bloqueado ? Colors.green : Colors.grey,
+    final colorScheme = Theme.of(context).colorScheme;
+
+    return Card(
+      margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+      child: ListTile(
+        leading: Icon(
+          contato.bloqueado ? Icons.block : Icons.account_circle,
+          color: contato.bloqueado ? Colors.red : colorScheme.primary,
+          size: 32,
+        ),
+        title: Text(contato.nome),
+        subtitle: Text(contato.telefone),
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => DetalhesContatoScreen(contato: contato),
             ),
-            tooltip: contato.bloqueado ? 'Desbloquear' : 'Bloquear',
-            onPressed: () => onToggleBloqueado(index),
-          ),
-          IconButton(
-            icon: const Icon(Icons.delete, color: Colors.red),
-            tooltip: 'Excluir',
-            onPressed: () => onDelete(index),
-          ),
-        ],
+          );
+        },
+        trailing: PopupMenuButton<String>(
+          onSelected: (value) {
+            switch (value) {
+              case 'editar':
+                onEdit(contato, index);
+                break;
+              case 'excluir':
+                onDelete(index);
+                break;
+              case 'bloquear':
+                onToggleBloqueado(index);
+                break;
+            }
+          },
+          itemBuilder: (context) => [
+            const PopupMenuItem(
+              value: 'editar',
+              child: Text('Editar'),
+            ),
+            const PopupMenuItem(
+              value: 'excluir',
+              child: Text('Excluir'),
+            ),
+            PopupMenuItem(
+              value: 'bloquear',
+              child: Text(contato.bloqueado ? 'Desbloquear' : 'Bloquear'),
+            ),
+          ],
+        ),
       ),
     );
   }
